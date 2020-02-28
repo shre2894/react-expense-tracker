@@ -1,3 +1,5 @@
+project forked from [Expense Tracker](https://github.com/bradtraversy/expense-tracker-mern), big thanks to him
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 #Usage
