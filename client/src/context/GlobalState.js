@@ -1,31 +1,28 @@
 import React, { createContext, useReducer } from "react";
+import AppReducer from "./AppReducer";
 import axios from "axios";
 
-import AppReducer from "./AppReducer";
-
-// Intial State
+// Initial state
 const initialState = {
-  transactions: [
-    // { id: 1, text: "Flower", amount: -20 },
-  ],
+  transactions: [],
   error: null,
   loading: true
 };
 
-// Create Context
+// Create context
 export const GlobalContext = createContext(initialState);
 
-// provider
+// Provider component
 export const GlobalProvider = ({ children }) => {
   const [state, dispatch] = useReducer(AppReducer, initialState);
 
-  //Actions
+  // Actions
   async function getTransactions() {
     try {
       const res = await axios.get("/api/v1/transactions");
 
       dispatch({
-        type: "GET_TRANSACTION",
+        type: "GET_TRANSACTIONS",
         payload: res.data.data
       });
     } catch (err) {
@@ -38,10 +35,10 @@ export const GlobalProvider = ({ children }) => {
 
   async function deleteTransaction(id) {
     try {
-      await axios.delete("/api/v1/transactions/" + id);
+      await axios.delete(`/api/v1/transactions/${id}`);
 
       dispatch({
-        type: "DELETE_TRANACTION",
+        type: "DELETE_TRANSACTION",
         payload: id
       });
     } catch (err) {
@@ -58,11 +55,12 @@ export const GlobalProvider = ({ children }) => {
         "Content-Type": "application/json"
       }
     };
+
     try {
-      const res = await axios.post("/api/v1/transactions".transaction, config);
+      const res = await axios.post("/api/v1/transactions", transaction, config);
 
       dispatch({
-        type: "ADD_TRANACTION",
+        type: "ADD_TRANSACTION",
         payload: res.data.data
       });
     } catch (err) {
@@ -77,9 +75,9 @@ export const GlobalProvider = ({ children }) => {
     <GlobalContext.Provider
       value={{
         transactions: state.transactions,
+        error: state.error,
+        loading: state.loading,
         getTransactions,
-        error,
-        loading,
         deleteTransaction,
         addTransaction
       }}
